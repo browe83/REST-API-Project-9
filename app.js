@@ -1,5 +1,3 @@
-'use strict';
-
 // load modules
 const express = require('express');
 const morgan = require('morgan');
@@ -12,6 +10,8 @@ const app = express();
 
 //import models and connection
 const { sequelize, User, Course } = require('./models');
+const coursesRouter = require('./routes/courses');
+const usersRouter = require('./routes/users');
 
 //test connection to database
 (async () => {
@@ -27,23 +27,25 @@ const { sequelize, User, Course } = require('./models');
 // setup morgan which gives us http request logging
 app.use(morgan('dev'));
 
+app.use('/courses', coursesRouter);
+app.use('/users', usersRouter);
 // setup a friendly greeting for the root route
-app.get('/', (req, res) => {
-  res.json({
-    message: 'Welcome to the REST API project!',
-  });
-});
+// app.get('/', (req, res) => {
+//   res.json({
+//     message: 'Welcome to the REST API project!',
+//   });
+// });
 
 
-app.get('/users', async (req, res) => {
-  const users = await User.findAll();
-  res.json(users);
-});
+// app.get('/users', async (req, res) => {
+//   const users = await User.findAll();
+//   res.json(users);
+// });
 
-app.get('/courses', async (req, res) => {
-  const courses = await Course.findAll();
-  res.json(courses);
-});
+// app.get('/courses', async (req, res) => {
+//   const courses = await Course.findAll();
+//   res.json(courses);
+// });
 
 // send 404 if no other route matched
 app.use((req, res) => {
