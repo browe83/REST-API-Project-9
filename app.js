@@ -8,7 +8,7 @@ const enableGlobalErrorLogging = process.env.ENABLE_GLOBAL_ERROR_LOGGING === 'tr
 // create the Express app
 const app = express();
 
-//import models and connection
+//import models, routers and connection
 const { sequelize, User, Course } = require('./models');
 const coursesRouter = require('./routes/courses');
 const usersRouter = require('./routes/users');
@@ -27,8 +27,8 @@ const usersRouter = require('./routes/users');
 // setup morgan which gives us http request logging
 app.use(morgan('dev'));
 
-app.use('/courses', coursesRouter);
-app.use('/users', usersRouter);
+app.use('/api/courses', coursesRouter);
+app.use('/api/users', usersRouter);
 // setup a friendly greeting for the root route
 // app.get('/', (req, res) => {
 //   res.json({
