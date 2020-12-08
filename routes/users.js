@@ -13,14 +13,10 @@ router
       user: req.currentUser,
     });
   }))
-  // .get('/', (async (req, res) => {
-  //   const users = await User.findAll();
-  //   res.json({ users });
-  // }))
   .post('/', asyncHandler(async (req, res) => {
     try {
       await User.create(req.body);
-      res.status(201).json({ message: 'Account successfully created!' });
+      res.redirect(201, '/');
     } catch (error) {
       if (error.name === 'SequelizeValidationError' || error.name === 'SequelizeUniqueConstraintError') {
         const errors = error.errors.map((err) => err.message);

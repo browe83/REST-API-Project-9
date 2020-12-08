@@ -2,34 +2,44 @@ const express = require('express');
 
 const router = express.Router();
 
+const { authenticateUser } = require('../middleware/auth-user');
 const { asyncHandler } = require('../middleware/async-handler');
-const { Course } = require('../models');
+const { Course, User } = require('../models');
 
-/* Handler function to wrap each route. */
-// function asyncHandler(cb) {
-//   return async (req, res, next) => {
-//     try {
-//       await cb(req, res, next);
-//     } catch (error) {
-//       // Forward error to the global error handler
-//       next(error);
-//     }
-//   };
-// }
 
 router
 // GET a list of all courses
   .get('/', asyncHandler(async (req, res) => {
-    console.log('coures route hit');
-    const courses = await Course.findAll();
-    res.json(courses);
+    const courses = await Course.findAll({
+      include: {
+        model: User,
+      },
+    });
+    res.json({ courses });
   }))
-// GET a course by id
+// GET retrieves a course by id
   .get('/:id', asyncHandler(async (req, res) => {
-    console.log('course by id route hit');
     const courseId = req.params.id;
-    const course = await Course.findByPk(courseId);
+    const course = await Course.findByPk(courseId, {
+      include: {
+        model: User,
+      },
+    });
     res.json(course);
+  }))
+// POST creates a new course.
+  .post('/', authenticateUser, asyncHandler(async (req, res) => {
+    try {
+      await Course.create(req.body);
+      res.redirect(201, '/');
+    } catch (error) {
+      if (error.name === 'SequelizeValidationError' || error.name === 'SequelizeUniqueConstraintError') {
+        const errors = error.errors.map((err) => err.message);
+        res.status(400).json({ errors });
+      } else {
+        throw error;
+      }
+    }
   }));
 
 module.exports = router;

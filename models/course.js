@@ -1,7 +1,7 @@
-'use strict';
 const {
-  Model
+  Model,
 } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   class Course extends Model {
     /**
@@ -18,12 +18,13 @@ module.exports = (sequelize, DataTypes) => {
         },
       });
     }
-  };
+  }
+
   Course.init({
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
-      autoIncrement: true
+      autoIncrement: true,
     },
     title: {
       type: DataTypes.STRING,
@@ -55,5 +56,6 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'Course',
   });
+
   return Course;
 };
