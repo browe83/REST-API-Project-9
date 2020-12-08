@@ -26,6 +26,7 @@ const usersRouter = require('./routes/users');
 
 // setup morgan which gives us http request logging
 app.use(morgan('dev'));
+app.use(express.json());
 
 app.use('/api/courses', coursesRouter);
 app.use('/api/users', usersRouter);
