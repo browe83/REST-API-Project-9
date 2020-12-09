@@ -71,13 +71,14 @@ router
   }))
 // PUT updates a course with id.
   .put('/:id', authenticateUser, asyncHandler(async (req, res) => {
-    console.log(req.body);
     try {
       const course = await Course.findByPk(req.params.id);
       if (course === null || course === undefined) {
         const error = new Error('Course not found');
         error.status = 404;
         throw error;
+      } else if (req.currentUser.id !== course.userId) {
+        return res.sendStatus(401);
       }
       await course.update(req.body);
       res.redirect(204, '/');
