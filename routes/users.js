@@ -10,7 +10,11 @@ router
 // GET a current user.
   .get('/', authenticateUser, asyncHandler(async (req, res) => {
     res.status(200).json({
-      user: req.currentUser,
+      user: {
+        firstName: req.currentUser.firstName,
+        lastName: req.currentUser.lastName,
+        emailAddress: req.currentUser.emailAddress,
+      },
     });
   }))
   .post('/', asyncHandler(async (req, res) => {
