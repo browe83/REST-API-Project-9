@@ -93,11 +93,13 @@ router
   }))
 // DELETE removes course by id.
   .delete('/:id', authenticateUser, asyncHandler(async (req, res) => {
-    const course = await User.findByPk(req.params.id);
+    const course = await Course.findByPk(req.params.id);
     if (course === null || course === undefined) {
       const err = new Error('Course not found');
       err.status = 404;
       throw err;
+    } else if (req.currentUser.id !== course.userId) {
+      return res.sendStatus(401);
     } else {
       await course.destroy(req.body);
       res.sendStatus(204);
