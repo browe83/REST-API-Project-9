@@ -81,14 +81,13 @@ router
         return res.sendStatus(401);
       }
       await course.update(req.body);
-      res.redirect(204, '/');
+      return res.redirect(204, '/');
     } catch (error) {
       if (error.name === 'SequelizeValidationError' || error.name === 'SequelizeUniqueConstraintError') {
         const errors = error.errors.map((err) => err.message);
-        res.status(400).json({ errors });
-      } else {
-        throw error;
+        return res.status(400).json({ errors });
       }
+      throw error;
     }
   }))
 // DELETE removes course by id.
@@ -102,7 +101,7 @@ router
       return res.sendStatus(401);
     } else {
       await course.destroy(req.body);
-      res.sendStatus(204);
+      return res.sendStatus(204);
     }
   }));
 
