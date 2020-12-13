@@ -1,12 +1,14 @@
 // load modules
 const express = require('express');
 const morgan = require('morgan');
+const cors = require('cors');
 
 // variable to enable global error logging
 const enableGlobalErrorLogging = process.env.ENABLE_GLOBAL_ERROR_LOGGING === 'true';
 
 // create the Express app
 const app = express();
+app.use(cors());
 
 //import models, routers and connection
 const { sequelize, User, Course } = require('./models');
